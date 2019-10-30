@@ -1,0 +1,11 @@
+# Project exclude paths
+/venv/
+
+# DB
+database.db
+
+# creation db
+create_db.py
+
+#.idea
+/.idea
