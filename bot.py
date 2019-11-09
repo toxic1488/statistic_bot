@@ -1,4 +1,5 @@
 import os
+import psycopg2
 import random
 import sqlite3
 import telebot
@@ -33,8 +34,8 @@ for key in types_dict:
 for key in push_ups:
     keyboard_push_ups.add(push_ups[key])
 
+DATABASE_URL = os.environ['DATABASE_URL']
 token = os.environ.get('token', None)
-
 bot = telebot.TeleBot(token)
 
 
@@ -82,7 +83,7 @@ def choose_type(message):
 
 def enter_data(message):
     sql = "INSERT INTO measurements (chat_id, type, result, date) VALUES (?, ?, ?, ?)"
-    conn = sqlite3.connect('database.db')
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cursor = conn.cursor()
     global activity_type
     try:

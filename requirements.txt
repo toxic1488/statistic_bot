@@ -4,3 +4,4 @@ requests==2.7.0
 setuptools==40.8.0
 six==1.12.0
 telebot==0.0.3
+psycopg2-binary==2.8.4
