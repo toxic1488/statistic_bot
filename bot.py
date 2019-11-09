@@ -89,10 +89,11 @@ def enter_data(message):
     try:
         cursor.execute(sql, [message.chat.id, activity_type, message.text, time.strftime("%Y-%m-%d", time.gmtime())])
         conn.commit()
-    except:
-        bot.send_message('Произошла какая-то ошибка', reply_markup=keyboard_basic)
+    except Exception as exc:
+        print(exc)
+        bot.send_message(message.chat.id, 'Произошла какая-то ошибка', reply_markup=keyboard_basic)
     else:
-        bot.send_message('Данные успешно записаны!', reply_markup=keyboard_basic)
+        bot.send_message(message.chat.id, 'Данные успешно записаны!', reply_markup=keyboard_basic)
     cursor.close()
 
 
