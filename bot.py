@@ -82,12 +82,15 @@ def choose_type(message):
 
 
 def enter_data(message):
-    sql = "INSERT INTO measurements (chat_id, type, result, date) VALUES (?, ?, ?, ?)"
+    # sql = "INSERT INTO measurements (chat_id, type, result, date) VALUES (?, ?, ?, ?)"
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cursor = conn.cursor()
     global activity_type
     try:
-        cursor.execute(sql, [message.chat.id, activity_type, message.text, time.strftime("%Y-%m-%d", time.gmtime())])
+        cursor.execute(
+            "INSERT INTO measurements (chat_id, type, result, date) VALUES (%s, %i, %s, %s)"
+            (message.chat.id, activity_type, message.text, time.strftime("%Y-%m-%d", time.gmtime()))
+        )
         conn.commit()
     except Exception as exc:
         print(exc)
