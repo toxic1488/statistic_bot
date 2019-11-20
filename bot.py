@@ -53,11 +53,13 @@ def send_text(message):
         bot.send_message(chat_id, 'Выберите упражнение', reply_markup=keyboard_activity)
         bot.register_next_step_handler(message, choose_type)
     elif message.text.lower() == 'график':
-        connection = sqlite3.connect('database.db')
+        connection = psycopg2.connect(DATABASE_URL, sslmode='require')
         cursor = connection.cursor()
-        sql = "SELECT type, result, date FROM measurements WHERE chat_id = ? ORDER BY date;"
         try:
-            cursor.execute(sql, (chat_id,))
+            cursor.execute(
+                "SELECT type, result, date FROM measurements WHERE chat_id = %s ORDER BY date;"
+                % chat_id
+            )
         except:
             pass
         data = cursor.fetchall()
@@ -82,14 +84,13 @@ def choose_type(message):
 
 
 def enter_data(message):
-    # sql = "INSERT INTO measurements (chat_id, type, result, date) VALUES (?, ?, ?, ?)"
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cursor = conn.cursor()
     global activity_type
     try:
         cursor.execute(
             "INSERT INTO measurements (chat_id, type, result, date) VALUES (%s, %i, %s, %s)"
-            % (message.chat.id, activity_type, message.text, time.strftime("%Y-%m-%d", time.gmtime()))
+            % (message.chat.id, activity_type, str(message.text), time.strftime("%Y-%m-%d", time.gmtime()))
         )
         conn.commit()
     except Exception as exc:
