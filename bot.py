@@ -66,7 +66,7 @@ def send_text(message):
         for measurement in data:
             res = 'type: ' + str(measurement[0]) + ', result: ' + measurement[1] + ', date: ' + measurement[2]
             bot.send_message(chat_id, res, reply_markup=keyboard_basic)
-        cursor.close()
+        connection.close()
 
 
 def choose_type(message):
@@ -98,7 +98,7 @@ def enter_data(message):
         bot.send_message(message.chat.id, 'Произошла какая-то ошибка', reply_markup=keyboard_basic)
     else:
         bot.send_message(message.chat.id, 'Данные успешно записаны!', reply_markup=keyboard_basic)
-    cursor.close()
+    conn.close()
 
 
 # Executing
