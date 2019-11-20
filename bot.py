@@ -90,7 +90,7 @@ def enter_data(message):
     try:
         cursor.execute(
             "INSERT INTO measurements (chat_id, type, result, date) VALUES (%s, %i, %s, %s)"
-            % (message.chat.id, activity_type, str(message.text), time.strftime("%Y-%m-%d", time.gmtime()))
+            % (message.chat.id, activity_type, '"' + message.text + '"', time.strftime("%Y-%m-%d", time.gmtime()))
         )
         conn.commit()
     except Exception as exc:
